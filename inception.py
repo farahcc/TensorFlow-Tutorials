@@ -273,10 +273,10 @@ class Inception:
 
             # Open the graph-def file for binary reading.
             path = os.path.join(data_dir, path_graph_def)
-            with tf.gfile.FastGFile(path, 'rb') as file:
+            with tf.gfile.tf.gfile.GFile(path, 'rb') as file:
                 # The graph-def is a saved copy of a TensorFlow graph.
                 # First we need to create an empty graph-def.
-                graph_def = tf.GraphDef()
+                graph_def = tf.compat.v1.GraphDef()
 
                 # Then we load the proto-buf file into the graph-def.
                 graph_def.ParseFromString(file.read())
@@ -303,7 +303,7 @@ class Inception:
         self.transfer_len = self.transfer_layer.get_shape()[3]
 
         # Create a TensorFlow session for executing the graph.
-        self.session = tf.Session(graph=self.graph)
+        self.session = tf.compat.v1.Session(graph=self.graph)
 
     def close(self):
         """
@@ -350,7 +350,7 @@ class Inception:
 
         elif image_path is not None:
             # Read the jpeg-image as an array of bytes.
-            image_data = tf.gfile.FastGFile(image_path, 'rb').read()
+            image_data = tf.gfile.tf.gfile.GFile(image_path, 'rb').read()
 
             # Image is passed in as a jpeg-encoded image.
             feed_dict = {self.tensor_name_input_jpeg: image_data}
